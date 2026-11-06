@@ -1,0 +1,20 @@
+name = "DFS"
+defaultTargets = ["DFSLean", "DFSExpr", "SpecCheck"]
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "e75a902d370b7bc0953464cb6894422ab4b4da86"
+
+# Training dynamics: Sec. 4 and App. C
+[[lean_lib]]
+name = "DFSLean"
+
+# Expressivity: Sec. 3 and its appendix
+[[lean_lib]]
+name = "DFSExpr"
+
+# Frozen specifications (statements with `sorry`) and the check that every proof matches them.
+[[lean_lib]]
+name = "SpecCheck"
+roots = ["DFSLean.SpecCheck", "DFSExpr.SpecCheck"]

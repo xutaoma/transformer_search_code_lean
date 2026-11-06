@@ -1,0 +1,42 @@
+name: Lean proofs
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: lean
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Download prebuilt Mathlib
+        run: lake exe cache get
+
+      - name: Build the proofs and SpecCheck
+        run: lake build 2>&1 | tee build.log
+
+      - name: No sorry outside the Spec files
+        run: |
+          if grep "declaration uses" build.log | grep "sorry" | grep -v "/Spec"; then
+            echo "Found sorry outside the Spec files"; exit 1
+          fi
+
+      - name: Main theorems use only the standard axioms
+        run: |
+          grep "depends on axioms" build.log
+          if grep "depends on axioms" build.log | grep -v "\[propext, Classical.choice, Quot.sound\]"; then
+            echo "Found a non-standard axiom"; exit 1
+          fi
+          test "$(grep -c "depends on axioms" build.log)" -gt 0

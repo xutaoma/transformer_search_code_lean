@@ -1,0 +1,24 @@
+# All hyperparameters of the experiments. alpha = 1 throughout.
+seed: 20261105
+test_set_seed: 7
+threads: 12
+A:
+  N: 16
+  K: 8
+  ode: {method: BDF, rtol: 1.0e-9, atol: 1.0e-12, eps: 1.0e-6, horizon: 1.0e+9, eps_check: [1.0e-4, 1.0e-5, 1.0e-7]}
+  euler_check: {eta: 0.05, horizon: 5.0e+5}
+  full: {eta: 0.05, B: 128, steps: 10000000, chunks: 16}
+  fit_from: 1.0e+3
+B:
+  fit_window: [1.0e+3, 1.0e+9]
+  a2_fit_window: [1.0e+3, 5.0e+5]
+  long_horizon: 1.0e+16   # diagnostic only; float64 RHS noise (t*1e-16) stops all solvers at t~3e16
+  long_horizon_eps: 1.0e-4
+  long_horizon_rtol: 1.0e-9
+C:
+  cases: [[8, 3], [10, 4], [12, 4], [16, 4], [24, 4], [32, 4]]
+  fit_window: [1.0e+4, 1.0e+9]
+D:
+  eta: 0.05
+  reduced_horizon: 5.0e+5
+  full: {B: 128, steps: 1000000, seeds: [1, 2, 3], chunks: 8, threads: 4}

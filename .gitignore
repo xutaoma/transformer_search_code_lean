@@ -1,0 +1,17 @@
+# Lean build output and downloaded Mathlib
+.lake/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+
+# Outputs of the experiments (results, cached test sets, figures)
+experiments/results/
+experiments/figures/
+/figure/
+
+# OS / editor
+.DS_Store
+.vscode/
